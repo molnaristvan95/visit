@@ -17,25 +17,28 @@ color:#ffab;
 </style>
 </head>
 <body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" defer>
-  function updateVisitors() {
-    // A látogatók számának lekérdezése
-    const visitors = getVisitors();
-
-    // A látogatók számának megjelenítése
-    $("#visitors").html(visitors);
-  }
-
-  // A látogatók számának rendszeres frissítése
-  setInterval(updateVisitors, 1000);
-</script>
 hany ember van fent
-<div id="visitors">latogatok szama</div>
+<div id="vis">latogatok szama</div>
 
 
 <script type="text/javascript">
+  function getVisitors() {
+  // A Google Analytics API-jának használata a látogatók számának lekérdezésére
+  const response = await fetch(`https://www.googleapis.com/analytics/v3/data/ga?ids=UA-XXXXXXXX-X&start-date=today&end-date=today&metrics=ga:visits&dimensions=ga:source&filters=ga:medium==referral`, {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer YOUR_API_KEY",
+    },
+  });
+
+  // A válasz dekódolása
+  const data = await response.json();
+
+  // A látogatók számának visszatérése
+  document.getElementById('vis').innerHTML = data.rows[0].visits;
+    return;
+}
+setInterval(getVisitors, 5000);
 alert('test page');
 </script>
 </body>
